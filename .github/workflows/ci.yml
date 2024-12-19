@@ -1,0 +1,24 @@
+name: CI # defines name of the workflow
+
+on:
+  pull_request:
+    branches:
+      - main # creates a pull request for the main branch
+
+jobs:
+  code-quality-check: # job name
+    runs-on: ubuntu-latest # runs on ubuntu
+    steps:
+      - name: Checkout code # loads the source code
+        uses: actions/checkout@v4 # uses the checkout action
+
+      - name: Set up Node.js # installs node version 18.x to use npm and node commands
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies # installs the dependencies
+        run: npm ci
+
+      - name: Run linter # runs the linter
+        run: npm run lint
