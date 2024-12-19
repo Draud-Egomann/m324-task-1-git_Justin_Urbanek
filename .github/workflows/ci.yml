@@ -36,7 +36,6 @@ jobs:
           git add .
           git commit -m "chore: apply prettier formatting"
           git push
-        if: ${{ steps.format-write.outcome == 'success' && steps.check-format-changes.outcome != 'success' }}
       
       - name: Run tests # runs the tests
         run: npm run test
