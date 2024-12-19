@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout code # loads the source code
         uses: actions/checkout@v4 # uses the checkout action
+        with:
+          ref: ${{ github.head_ref }} # Checkout the correct PR branch
 
       - name: Set up Node.js # installs node version 18.x to use npm and node commands
         uses: actions/setup-node@v4
@@ -31,12 +33,14 @@ jobs:
 
       - name: Commit and push format changes # commits and pushes the changes if there were any
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git checkout ${{ github.head_ref }}  # Checkout the current branch to push changes
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
           git add .
+          git reset .github/workflows/ci.yml  # Remove the workflow file from the commit
           git commit -m "chore: apply prettier formatting"
           git push origin ${{ github.head_ref }} # Push the changes to the current PR branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the automatically provided token
 
       - name: Run tests # runs the tests
         run: npm run test
