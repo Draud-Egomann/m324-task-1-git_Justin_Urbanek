@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout code # loads the source code
         uses: actions/checkout@v4 # uses the checkout action
+        with:
+          ref: ${{ github.head_ref }} # Checkout the correct PR branch
 
       - name: Set up Node.js # installs node version 18.x to use npm and node commands
         uses: actions/setup-node@v4
