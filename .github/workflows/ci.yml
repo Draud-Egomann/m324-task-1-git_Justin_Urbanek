@@ -33,9 +33,10 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
+          git checkout ${{ github.head_ref }}  # Checkout the current branch to push changes
           git add .
           git commit -m "chore: apply prettier formatting"
-          git push
-      
+          git push origin ${{ github.head_ref }} # Push the changes to the current PR branch
+
       - name: Run tests # runs the tests
         run: npm run test
