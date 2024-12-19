@@ -23,8 +23,20 @@ jobs:
       - name: Run linter # runs the linter
         run: npm run lint
 
-      - name: Run format write # runs the format check
+      - name: Run format write # runs the format write to apply Prettier formatting
         run: npm run format-write
 
+      - name: Check for format changes # checks if there were changes after format-write
+        run: git diff --exit-code || echo "There are format changes"
+
+      - name: Commit and push format changes # commits and pushes the changes if there were any
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .
+          git commit -m "chore: apply prettier formatting"
+          git push
+        if: ${{ steps.format-write.outcome == 'success' && steps.check-format-changes.outcome != 'success' }}
+      
       - name: Run tests # runs the tests
         run: npm run test
